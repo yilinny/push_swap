@@ -5,13 +5,13 @@ static int count_moves(int pos, snapshot *summary)
 	//pos starts from 0, 0 being top. Length - 1 will be at the bottom/last 
 	int final;
 	t_list *current;
-	t_list *current_moves;
+	char rotation_flag;
 	int count;
 	int pos_b;
 
+	final = 0;
 	count = pos;
 	current = summary->stack_a;
-	current_moves = summary->moves;
 	while (count > 0)
 	{
 		current = current ->next;
@@ -21,29 +21,38 @@ static int count_moves(int pos, snapshot *summary)
 	if (pos < ft_lstsize(summary->stack_a)/2)
 	{
 		final += pos;
-		count = final;
-		while (count > 0)
-		{
-			ft_lstadd_back(current_moves, 'ra');
-			count --;
-		}
+		rotation_flag = 'u'; // everything goes up 
 	}
 	else
 	{
-		final = ft_lstsize(summary->stack_a) - pos;
-		count = final;
-		while (count > 0)
-		{
-			ft_lstadd_back(current_moves, 'rra');
-			count --;
-		}
+		final += ft_lstsize(summary->stack_a) - pos;
+		rotation_flag = 'd'; // top goes down, everything goes down 
+
 	}
 	//number of rotations for b 
 	pos_b = sort_b(summary->stack_b, current->content);
-	if (pos_b < ft_lstsize(stack_b)/2)
-		final += pos_b;
-
-
+	if (pos_b < ft_lstsize(summary->stack_b)/2)
+	{	
+		if (rotation_flag == 'u')
+		{
+			if (pos_b - pos > 0)
+				final += (pos_b - pos);
+		}
+		else
+			final += pos_b;
+	}
+	else 
+	{
+		count = ft_lstsize(summary->stack_b) - pos_b;
+		if (rotation_flag == 'd')
+		{
+			if (count - final > 0)
+				final += (pos_b - pos);
+		}
+		else
+			final += count;
+	}
+	return (final);
 };
 
 void move_small_to_b (snapshot *current, int average)
