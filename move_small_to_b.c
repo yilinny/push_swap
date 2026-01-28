@@ -8,6 +8,7 @@ static int count_moves(int pos, snapshot *summary)
 	char rotation_flag;
 	int count;
 	int pos_b;
+	int rot_a;
 
 	final = 0;
 	count = pos;
@@ -20,38 +21,29 @@ static int count_moves(int pos, snapshot *summary)
 	// number of rotations for a 
 	if (pos < ft_lstsize(summary->stack_a)/2)
 	{
-		final += pos;
+		rot_a = pos;
 		rotation_flag = 'u'; // everything goes up 
 	}
 	else
 	{
-		final += ft_lstsize(summary->stack_a) - pos;
+		rot_a= ft_lstsize(summary->stack_a) - pos;
 		rotation_flag = 'd'; // top goes down, everything goes down 
 
 	}
 	//number of rotations for b 
 	pos_b = sort_b(summary->stack_b, current->content);
+	int rot_b;
 	if (pos_b < ft_lstsize(summary->stack_b)/2)
-	{	
-		if (rotation_flag == 'u')
-		{
-			if (pos_b - pos > 0)
-				final += (pos_b - pos);
-		}
-		else
-			final += pos_b;
-	}
-	else 
-	{
-		count = ft_lstsize(summary->stack_b) - pos_b;
-		if (rotation_flag == 'd')
-		{
-			if (count - final > 0)
-				final += (pos_b - pos);
-		}
-		else
-			final += count;
-	}
+    	rot_b = pos_b;   // rb
+	else
+    	rot_b = ft_lstsize(summary->stack_b) - pos_b; // rrb
+	if (rotation_flag == 'u' && pos_b < ft_lstsize(summary->stack_b)/2)
+    	final = (rot_a > rot_b) ? rot_a : rot_b; // rr
+	else if (rotation_flag == 'd' && pos_b >= ft_lstsize(summary->stack_b)/2)
+    	final = (rot_a > rot_b) ? rot_a : rot_b; // rrr
+	else
+    	final = rot_a + rot_b; // separate rotations
+
 	return (final);
 };
 
