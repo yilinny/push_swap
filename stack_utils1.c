@@ -39,7 +39,7 @@ void rotate_stack (t_list **stack)
 	t_list *second;
 	if (!stack || !*stack || !(*stack)->next)
 		return;
-	last = ft_getlastlist_bonus(stack);
+	last = ft_lstlast_bonus(stack);
 	second = (*stack)-> next;
 	last -> next = *stack;
 	*stack = second;
@@ -52,5 +52,6 @@ void push_stack (t_list **src, t_list **dest)
 		return;
 	move = *src;
 	*src = move -> next;
-	ft_lst_addfront(dest, move); // accounts for empty list 
+	ft_lstadd_front_bonus(dest, move); // accounts for empty list 
 }
+
