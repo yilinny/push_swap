@@ -16,3 +16,12 @@
 > a state to hold the current Stack A and Stack B
 > a state to hold the current list of moves done. 
 
+
+
+#steps involved 
+1. The input is validated 
+2. The input is sorted in place using quicksort algorithim. It is then converted to its rank, where 0 is the smallest of the lot. and the numbers only go from 0 - length - 1
+--> initialize snapshot 
+3. The average is calculated to find a reasonable partition point. We aim for half of the length into B
+
+

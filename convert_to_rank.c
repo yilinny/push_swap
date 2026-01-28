@@ -6,13 +6,13 @@
 /*   By: yi-ltan <yi-ltan@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 12:24:38 by yi-ltan           #+#    #+#             */
-/*   Updated: 2026/01/11 13:24:44 by yi-ltan          ###   ########.fr       */
+/*   Updated: 2026/01/28 12:07:02 by yi-ltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void swap(int **a, int **b)
+static void swap(int **a, int **b)
 {
 	int *temp;
 	if (*a == *b)
@@ -22,7 +22,7 @@ void swap(int **a, int **b)
 	*b = temp;
 }
 
-int ft_partition(int **num_rank_pair, int start, int end)
+static int ft_partition(int **num_rank_pair, int start, int end)
 {
 	int i;
 	int j;
@@ -45,7 +45,7 @@ int ft_partition(int **num_rank_pair, int start, int end)
 	return (j);
 }
 
-void ft_quicksort (int **num_rank_pair, int start, int end)
+static void ft_quicksort (int **num_rank_pair, int start, int end)
 {
 	int pivot_index;
 	if (start < end)
@@ -59,7 +59,6 @@ void ft_quicksort (int **num_rank_pair, int start, int end)
 
 void	convert_to_rank(int *input, int length)
 {
-	// use argv argc for length and pass it in
 	int **num_rank_pair;
 	int i;
 
