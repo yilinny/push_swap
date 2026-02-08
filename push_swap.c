@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-static int *convert_char_to_int(char *input, int length)
+static int *convert_char_to_int(char **input, int length)
 {
 	int *final;
 	int i;
@@ -19,11 +19,16 @@ int main(int ac, char *av[])
 {
 	int *input;
 	int smallest_pos;
+	t_snapshot *summary;
 	//input validation 
-	input = convert_char_to_int(av, ac - 1);
+	input = convert_char_to_int(av + 1, ac - 1);
 	convert_to_rank(input, ac - 1);
-	smallest = sort_stacks(current);
-
+	summary = init_summary(input, ac -1);
+	smallest_pos = sort_stacks(summary, ac -1, 0);  // returns position of smallest in a
+	//calculate final -- pushes from b to a in order 
+	// print moves 
+	// ft lst clear for summary!
 	free(input);
+	free(summary);
 	
 }
