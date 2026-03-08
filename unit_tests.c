@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "push_swap.h"
 
 void print_arr(int *arr, int length)
@@ -77,16 +78,18 @@ int main (int ac, char *av[])
 	t_snapshot *summary;
 	int smallest_pos;
 
+	if (ac == 1)
+	{
+		printf("Error");
+		return (0);
+	}
+
 	input = convert_char_to_int(av + 1, ac -1);
-	printf("Input converted to int: ");
-	print_arr(input, ac -1);
-	printf("\nInput converted to rank, starting from 0\n");
 	convert_to_rank(input, ac -1);
-	print_arr(input, ac -1);
 	summary = init_summary(input, ac -1);
-	print_snapshot(summary);
 	smallest_pos = sort_stacks(summary, ac - 1, 0);
-	//printf("\n -1 if unsorted, position of smallest otherwise: %d", smallest_pos);
+	final_sort(summary, smallest_pos);
+	print_snapshot(summary);
 	free(input);
 	ft_lstclear(&(summary->stack_a), del_node);
 	ft_lstclear(&(summary->stack_b), del_node);

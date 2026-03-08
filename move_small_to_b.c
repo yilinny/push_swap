@@ -5,8 +5,9 @@ int sort_b(t_list *stack_b, int value)
     t_list *curr;
     int curr_val;
     int next_val;
-    int pos = 0;
+    int pos;
 
+	pos = 0;
     if (!stack_b || !stack_b->next)
         return 0;
 
@@ -16,24 +17,14 @@ int sort_b(t_list *stack_b, int value)
         curr_val = *(int *)curr->content;
         next_val = *(int *)curr->next->content;
         // Case 1: normal descending insertion
-        if (curr_val >= value && value >= next_val)
+        if (curr_val > value && value > next_val)
             return pos + 1;
         // Case 2: rotation break (max/min)
-        if (curr_val < next_val &&
-            (value > curr_val || value < next_val))
-            return pos + 1;
+        if (curr_val < next_val && (value > next_val || value < curr_val))
+			return pos + 1;
         curr = curr->next;
         pos++;
     }
-    // Last → first (cyclic check)
-    curr_val = *(int *)curr->content;
-    next_val = *(int *)stack_b->content;
-
-    if (curr_val >= value && value >= next_val)
-        return 0;
-    if (curr_val < next_val &&
-        (value > curr_val || value < next_val))
-        return 0;
     return 0;
 }
 
@@ -66,7 +57,6 @@ static int count_moves(int pos, t_snapshot *summary)
 	{
 		rot_a= ft_lstsize(summary->stack_a) - pos;
 		rotation_flag = 'd'; // top goes down, everything goes down 
-
 	}
 	//number of rotations for b 
 	pos_b = sort_b(summary-> stack_b, *(int *)(current->content));
@@ -85,93 +75,39 @@ static int count_moves(int pos, t_snapshot *summary)
 	return (final);
 }; 
 
-static void pos_to_top (int pos, char stack, t_snapshot *summary)
-{
-	int length;
-	if (stack == 'a')
-		length = ft_lstsize(summary->stack_a);
-	else
-		length = ft_lstsize(summary->stack_b);
-	
-	if (pos == 0)
-		return;
-	if (pos < length/2 && stack == 'a')
-	{
-		while (pos > 0)
-		{
-			alter_summary(summary, "ra");
-			pos --;
-		}
-	}
-	else if (pos < length /2 && stack == 'b')
-	{
-		while (pos > 0)
-		{
-			alter_summary(summary, "rb");
-			pos --;
-		}
-	}
-	else if (stack == 'a')
-	{
-		while (pos < length)
-		{
-			alter_summary(summary, "rra");
-			pos ++;
-		}
-	}
-	else
-	{
-		while (pos < length)
-		{
-			alter_summary(summary, "rrb");
-			pos ++;
-		}
-	}
-}
-
 static void move_to_b (int pos, t_snapshot *summary)
 {
 	int b_pos;
 	pos_to_top(pos, 'a', summary);
 	b_pos = sort_b(summary->stack_b, *(int *)(summary->stack_a->content));
-	printf("\nB_pos is %d", b_pos);
 	pos_to_top(b_pos, 'b', summary);
 	alter_summary(summary, "pb");
-	//condense_moves(summary);
 }
 
-void move_small_to_b(t_snapshot *summary, int average)
+void move_small_to_b(t_snapshot *summary, int pivot)
 {
     if (!summary || !summary->stack_a)
         return;
 
     t_list *current = summary->stack_a;
-    int size = ft_lstsize(summary->stack_a);
-    int from_top = 0;
-    int from_bottom = 0;
+    int best_top = -1;
+    int best_bottom = -1;
+	int pointer = 0;
 
-    // Count distance from top
-    while (current && *(int *)(current->content) > average)
-    {
-        current = current->next;
-        from_top++;
-    }
-
-    // Count distance from bottom (without modifying stack)
-    current = summary->stack_a;
-    from_bottom = 0;
-    t_list *last = ft_lstlast(summary->stack_a);
-    while (last && *(int *)(last->content) > average)
-    {
-        last = summary->stack_a;
-        for (int i = 0; i < size - from_bottom - 2; i++)
-            last = last->next;
-        from_bottom++;
-    }
-
-    // Decide which requires fewer moves
-    if (count_moves(from_top, summary) <= count_moves(from_bottom, summary))
-        move_to_b(from_top, summary);
+	// walk through list, if number < pivot point, update either top or bottom index 
+	while (current)
+	{
+		if (*(int *)(current ->content) < pivot)
+		{
+			if (best_top == -1)
+				best_top = pointer;
+			best_bottom = pointer;
+		}
+		current = current -> next;
+		pointer ++;
+	}
+    if (count_moves(best_top, summary) <= count_moves(best_bottom, summary))
+		move_to_b(best_top, summary);
     else
-        move_to_b(size - from_bottom, summary);
+        move_to_b(best_bottom, summary);
 }

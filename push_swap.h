@@ -6,7 +6,7 @@
 /*   By: yi-ltan <yi-ltan@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 12:17:30 by yi-ltan           #+#    #+#             */
-/*   Updated: 2026/01/28 14:15:33 by yi-ltan          ###   ########.fr       */
+/*   Updated: 2026/03/08 14:26:43 by yi-ltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 # define PUSH_SWAP_H
 
 # include <stdlib.h>
-# include "libft\libft.h"
 # include <stdio.h>
-
-typedef struct s_list
-{
-	void		*content;
-	struct s_list	*next;
-}	t_list;
+# include "libft/libft.h"
 
 typedef struct {
 	char	*move;
 	void (*func)(t_list **, t_list **);
 } stack_table;
+
+typedef struct {
+	char	*a_move;
+	char	*b_move;
+	char	*combined;
+	
+} move_table;
 
 typedef struct snapshot
 {
@@ -44,7 +45,10 @@ t_snapshot *init_summary (int *input, int length);
 void	move_small_to_b(t_snapshot *current, int average);
 int 	sort_stacks (t_snapshot *current, int length, int smallest);
 void alter_summary(t_snapshot *summary, char *move);
+void pos_to_top(int pos, char stack, t_snapshot *summary);
 int	check_sorted(int length, t_list **stack, int smallest);
+void final_sort (t_snapshot *summary, int smallest_a);
 void print_snapshot(t_snapshot *summary);
 void print_linked_list(t_list *list);
+void print_moves(t_list *moves);
 #endif

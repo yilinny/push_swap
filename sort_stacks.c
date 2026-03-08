@@ -28,14 +28,20 @@ int check_sorted(int length, t_list **stack, int smallest)
 	} //loops through node, expecting each to increment by 1. Returns 0 the moment that is false 
 	return (pos); // position of current smallest is returned, 0 is top 
 }
-static int calculate_average(int length, int smallest)
+static int calculate_move(int length, int smallest)
 {
+	//anything less THAN moves, equal to does NOT move. 
+	if (length < 4)
+		return(smallest + 1); 
+	if (length == 4)
+		return (smallest + 2);
 	if (length % 2 != 0)
 		length += 1;
-	return((length - smallest)/2);
+	return(smallest + (length/2));
+	
 }
 
-static int check_moved (t_list *stack, int min)
+static int check_moved (t_list *stack, int pivot)
 {
 	t_list *current;
 	if (!stack)
@@ -43,7 +49,7 @@ static int check_moved (t_list *stack, int min)
 	current = stack;
 	while (current)
 	{
-		if (*(int *)(current -> content) <=  min)
+		if (*(int *)(current -> content) <  pivot)
 			return(0);
 		current = current -> next;
 	}
@@ -52,7 +58,7 @@ static int check_moved (t_list *stack, int min)
 
 int sort_stacks (t_snapshot *current, int length, int smallest)
 {
-	int average;
+	int move_point;
 	t_list *stack_a;
 	int pos;
 
@@ -60,15 +66,10 @@ int sort_stacks (t_snapshot *current, int length, int smallest)
 	pos = check_sorted(length, &stack_a, smallest);
 	if (pos != -1)
 		return(pos);
-	average = calculate_average(length, smallest);
-	printf("\nAnything smaller than %d should be pushed to b", average);
-	while (check_moved(current->stack_a, average) == 0)
-	{
-		print_snapshot(current);	
-		move_small_to_b(current, average);
-	}
-	smallest = average;// index starts from 0 so the average rank is still present in stack A
+	move_point = calculate_move(length, smallest);
+	while (check_moved(current->stack_a, move_point) == 0)
+		move_small_to_b(current, move_point);
+	smallest = move_point;// index starts from 0 so the average rank is still present in stack A
 	length = length/2;
-	return (0);
-	sort_stacks(current, length, smallest);
+	return(sort_stacks(current, length, smallest));
 }

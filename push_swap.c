@@ -1,34 +1,46 @@
 #include "push_swap.h"
-
-static int *convert_char_to_int(char **input, int length)
+void error_exit()
 {
-	int *final;
-	int i;
-	final = malloc(length * sizeof(int));
-	if (!final)
-		return (0);
-	i = 0;
-	while (i < length)
-	{
-		final[i] = ft_atoi(input[i]);
-		i ++;
-	}
-	return(final);
+	write(2, "Error\n", 6);
+	exit (1);
 }
+
+
+static void del_node(void *content)
+{
+	free(content);
+}
+
+void print_moves (t_list *moves)
+{
+	t_list *curr;
+
+	curr = moves;
+	while (curr)
+	{
+		ft_printf("%s\n", (char *)(curr->content));
+		curr = curr ->next;
+	}
+}
+
 int main(int ac, char *av[])
 {
 	int *input;
 	int smallest_pos;
+	int length;
 	t_snapshot *summary;
-	//input validation 
-	input = convert_char_to_int(av + 1, ac - 1);
-	convert_to_rank(input, ac - 1);
-	summary = init_summary(input, ac -1);
-	smallest_pos = sort_stacks(summary, ac -1, 0);  // returns position of smallest in a
-	//calculate final -- pushes from b to a in order 
-	// print moves 
-	// ft lst clear for summary!
+
+	if (ac != 2)
+		error_exit();
+	input = convert_char_to_int(av[1], &length);
+	convert_to_rank(input, length);
+	summary = init_summary(input, length);
+	smallest_pos = sort_stacks(summary, length, 0);
+	final_sort(summary, smallest_pos);
+	print_moves(summary->moves);
 	free(input);
+	ft_lstclear(&(summary->stack_a), del_node);
+	ft_lstclear(&(summary->stack_b), del_node);
+	ft_lstclear(&(summary->moves), del_node);
 	free(summary);
-	
 }

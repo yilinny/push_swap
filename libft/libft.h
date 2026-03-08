@@ -6,7 +6,7 @@
 /*   By: yi-ltan <yi-ltan@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 13:08:19 by yi-ltan           #+#    #+#             */
-/*   Updated: 2025/12/01 10:12:51 by yi-ltan          ###   ########.fr       */
+/*   Updated: 2026/03/08 14:02:40 by yi-ltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 # define LIBFT_H
 
 # include <stdlib.h>
+# include <stdarg.h>
+# include <stdint.h>
+# include <unistd.h>
+# include <stdlib.h>
+
+typedef struct table
+{
+	char	symbol;
+	int		(*func)(va_list *, char);
+}	t_type_table;
 
 typedef struct s_list
 {
@@ -71,4 +81,13 @@ void	ft_lstiter(t_list *lst,
 			void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst,
 			void *(*f)(void *), void(*del)(void *));
+int		get_index(char c);
+char	*ft_utoa(unsigned int n);
+int		handle_char(va_list *args, char symbol);
+int		handle_str(va_list *args, char symbol);
+int		handle_ptr(va_list *args, char symbol);
+int		handle_int(va_list *args, char symbol);
+int		handle_unsigned(va_list *args, char symbol);
+int		handle_hex(va_list *args, char symbol);
+int		ft_printf(const char *str, ...);
 #endif

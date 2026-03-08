@@ -6,7 +6,7 @@
 /*   By: yi-ltan <yi-ltan@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 09:33:26 by yi-ltan           #+#    #+#             */
-/*   Updated: 2025/11/24 11:26:08 by yi-ltan          ###   ########.fr       */
+/*   Updated: 2026/03/08 16:58:03 by yi-ltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	ft_atoi(const char *s)
 	final = 0;
 	sign = 1;
 	str = (char *)s;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')

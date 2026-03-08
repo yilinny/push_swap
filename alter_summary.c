@@ -18,7 +18,7 @@ void alter_summary(t_snapshot *summary, char *move)
 	int i;
 
 	i = 0;
-	ft_lstadd_back(&(summary->moves), ft_lstnew(move));
+	ft_lstadd_back(&(summary->moves), ft_lstnew(ft_strdup(move)));
 	if (move[ft_strlen(move) -1] == 'a')
 	{
 		param_1 = &(summary->stack_a);
